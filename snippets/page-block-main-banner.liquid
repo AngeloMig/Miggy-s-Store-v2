@@ -1,0 +1,70 @@
+{%- style -%}
+{% if block.settings.video_url == blank %}
+  .image-with-text-overlay.use-for-giftpage .inner-section {
+    {% if block.settings.image != blank %}background-image: url('{{ block.settings.image | img_url: 'master' }}');{% endif %}
+    background-position: {{ block.settings.image_position }}; 
+  }
+{% endif %}
+
+{% if block.settings.video_mobile_url == blank %}
+  @media (max-width: 480px) {
+    .image-with-text-overlay.use-for-giftpage .inner-section {
+      {% if block.settings.mobile_image != blank %}background-image: url('{{ block.settings.mobile_image | img_url: 'master' }}');{% endif %}
+    }
+  }
+{% endif %}
+{%- endstyle -%}
+
+
+<div class="image-with-text-overlay use-for-giftpage">
+  <div class="inner-section {{ block.settings.text_position }}">
+    {% if block.settings.button_label == blank and block.settings.button_link != blank %}
+      <a href="{{ block.settings.button_link }}" class="link-sec {% if block.settings.scroll_link %}js-scroll-link{% endif %}"></a>
+    {% endif %}
+
+    <!-- Video -->
+    {%- if block.settings.video_url contains '.mp4' or block.settings.video_url contains '.MP4' -%}
+      <video
+        id="Mp4Video-{{ section.id }}"
+        src="{{ block.settings.video_url }}"
+        class="background-video"
+        loop muted playsinline autoplay></video>
+    {%- endif -%}
+
+    {%- if block.settings.video_mobile_url contains '.mp4' or block.settings.video_mobile_url contains '.MP4' -%}
+      <video
+        id="Mp4Video-{{ section.id }}"
+        src="{{ block.settings.video_mobile_url }}"
+        class="background-video-mobile"
+        loop muted playsinline autoplay></video>
+    {%- endif -%}
+    
+    <div class="wrap-content-sec">
+      <div class="hun-container">
+        <div class="hun-row">
+          <div class="content-section hun-col">
+            {% if block.settings.title != blank %}
+              <h3 class="title-section section-header__title" style="max-width: {{- block.settings.title_max_w -}}px;">
+                {{ block.settings.title }}
+              </h3>
+            {% endif %}
+            
+            {% if block.settings.subtitle != blank %}
+              <div class="subtitle-section" style="max-width: {{- block.settings.subtitle_max_w -}}px;">
+                {{ block.settings.subtitle }}
+              </div>
+            {% endif %}
+
+            {% if block.settings.button_label != blank %}
+              <div class="buttons-section">
+                <a class="btn-section {% if block.settings.scroll_link %}js-scroll-link{% endif %}" href="{{ block.settings.button_link }}">{{ block.settings.button_label }}</a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  

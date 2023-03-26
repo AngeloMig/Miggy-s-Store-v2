@@ -1,0 +1,8 @@
+<div class="site-footer__section">
+	<h3 class="title-footer">{{ block.settings.title_menu }}</h3>
+	<ul class="no-bullets inline-list site-footer__linklist">
+		{%- for link in linklists[block.settings.footer_menu_item].links -%}
+		    <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+	    {%- endfor -%}
+	</ul>
+</div>

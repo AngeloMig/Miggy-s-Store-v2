@@ -1,0 +1,8 @@
+{% assign page_class_section = request.path | handleize | split: '/' | last %}
+<div class="page-section {{page_class_section}}">
+    {% section 'page-baby' %}
+    <div class="review-section-page">
+        {% section 'testimonials-grid-baby' %}
+    </div>
+    {% section 'image-with-text-column-v2-baby' %}
+</div>

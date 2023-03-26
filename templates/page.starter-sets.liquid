@@ -1,0 +1,4 @@
+{% assign page_class_section = request.path | handleize | split: '/' | last %}
+<div class="page-section {{page_class_section}}">
+    {% section 'page-sections-template' %}
+</div>

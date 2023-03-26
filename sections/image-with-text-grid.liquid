@@ -1,0 +1,123 @@
+{% assign width_column = section.settings.num_column %}
+<style>
+    .background-media-grid.hun-col{
+        padding-bottom: calc(100%/{{width_column}}) !important;
+    }
+    @media only screen and (min-width: 769px){
+        .background-media-grid.hun-col{
+            flex-basis:calc(100%/{{width_column}}) !important;
+            max-width: calc(100%/{{width_column}}) !important;
+        }
+    }
+	@media only screen and (max-width: 568px){
+		.background-media-grid.hun-col{
+			padding-bottom: 100% !important;
+		}
+	}
+</style>
+
+<div class="inner-section">
+  <div class="hun-container">
+    <div class="hun-row set-{{ section.settings.num_column }}-col">
+
+      {%- for block in section.blocks -%}
+           {%- case block.type -%}
+			   {%- when 'block-image-grid' -%}
+				   {% render 'block-image-with-text-grid', block: block %}
+				   
+		   {%- endcase -%}
+      {%- endfor -%}
+
+    </div>
+  </div>
+</div>
+
+
+{% schema %}
+  {
+	"name": "Image with text grid",
+	"class": "image-with-text-grid",
+	"settings": [
+		{
+			"type": "text",
+			"id": "section_title",
+			"label": "Section title",
+			"default": "Image with text column"
+		},
+		{
+			"type": "select",
+			"id": "num_column",
+			"label": "Number of columns",
+			"default": "3",
+			"options": [{
+					"value": "2",
+					"label": "2 column"
+				},
+				{
+					"value": "3",
+					"label": "3 column"
+				},
+				{
+					"value": "4",
+					"label": "4 column"
+				},
+				{
+					"value": "5",
+					"label": "5 column"
+				}
+			]
+		}
+	],
+	"blocks": [{
+		"type": "block-image-grid",
+		"name": "Image grid",
+		"settings": [{
+				"type": "image_picker",
+				"id": "image",
+				"label": "Image"
+			},
+			{
+				"type": "header",
+				"content": "Text"
+			},
+			{
+				"type": "text",
+				"id": "item_title",
+				"label": "Item title",
+				"default": "Example title"
+			},
+			{
+				"type": "richtext",
+				"id": "item_des",
+				"label": "Description",
+				"default": "<p>This is description of the item.</p>"
+			},
+			{
+				"type": "text",
+				"id": "button_label",
+				"label": "Button label",
+				"default": "Button"
+			},
+			{
+				"type": "url",
+				"id": "button_link",
+				"label": "Button link"
+			}
+		]
+	}],
+	"presets": [{
+		"name": "Image with text grid",
+		"category": "Kankan section",
+		"blocks": [{
+				"type": "block-image-grid"
+			},
+			{
+				"type": "block-image-grid"
+			},
+			{
+				"type": "block-image-grid"
+			}
+		]
+	}]
+}
+{% endschema %}

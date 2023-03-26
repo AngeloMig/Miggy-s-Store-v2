@@ -1,0 +1,142 @@
+
+
+<div class="inner-section">
+  <div class="hun-container">
+    <div class="slider-sec js-call-slick before-load" data-animate="false">
+      <div class="slide-slick" data-slick='{"dots": false, "arrows": true, "autoplay": false, "infinite": true, "slidesToShow": 1, "slidesToScroll": 1}'>
+        
+        {%- for block in section.blocks -%}
+
+          <div class="item-slick">
+            <div class="inner-item">
+              {% if block.settings.link_item != blank %}
+                <a href="{{ block.settings.link_item }}" class="link-item"></a>
+              {% endif %}
+
+              <div class="text-item" style="background-color: {{ block.settings.bg_color }};">
+                {%- if block.settings.subtitle != blank -%}
+                  <div class="subtitle-item">
+                    {{ block.settings.subtitle }}
+                  </div>
+                {%- endif -%}
+
+                {%- if block.settings.title != blank -%}
+                  <h3 class="title-item" style="max-width: {{ block.settings.title_max_w }}px;">
+                    {{ block.settings.title }}
+                  </h3>
+                {%- endif -%}
+
+                {%- if block.settings.description != blank -%}
+                  <div class="des-item" style="max-width: {{ block.settings.description_max_w }}px;">
+                    {{ block.settings.description }}
+                  </div>
+                {%- endif -%}
+              </div>
+
+              <div class="pic-item">
+                <div class=" holder-image" {% if block.settings.image != blank %}style="background-image: url({{ block.settings.image | img_url: '1200x' }});"{% endif %}></div>
+              </div>
+            </div>
+          </div>
+
+        {%- endfor -%}
+          
+      </div>
+
+      <div class="arrows-slick {% if section.settings.show_arrow == false %}not-show{% endif %}">
+        <span class="item-arrow prev-slick"></span>
+
+        <span class="item-arrow next-slick"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="height: {{ section.settings.space_bottom }}px;"></div>
+
+{% schema %}
+  {
+    "name": "Feature Blog",
+    "class": "hun-feature-blog",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_arrow",
+        "label": "Show arrow",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "space_bottom",
+        "label": "More bottom space",
+        "default": 100, 
+        "min": 0,
+        "max": 150,
+        "step": 2,
+        "unit": "px"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "blog",
+        "name": "Blog",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "text",
+            "id": "subtitle",
+            "label": "Subtitle",
+            "default": "Subtitle"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Title"
+          },
+          {
+            "type": "range",
+            "id": "title_max_w",
+            "label": "Title max width",
+            "default": 320,
+            "min": 50,
+            "max": 600,
+            "step": 10,
+            "unit": "px"
+          },
+          {
+            "type": "richtext",
+            "id": "description",
+            "label": "Description",
+            "default": "<p>Description</p>"
+          },
+          {
+            "type": "range",
+            "id": "description_max_w",
+            "label": "Description max width",
+            "default": 320,
+            "min": 50,
+            "max": 600,
+            "step": 10,
+            "unit": "px"
+          },
+          {
+            "type": "color",
+            "id": "bg_color",
+            "label": "Background color",
+            "default": "#FFF6E2"
+          },
+          {
+            "type": "url",
+            "id": "link_item",
+            "label": "Item link"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,13 @@
+<div class="item-brand">
+  <div class="wrap-brand" style="max-width: {{- block.settings.brand_width -}}px;">
+    {% if block.settings.brand_link != blank %}
+      <a href="{{ block.settings.brand_link }}"></a>
+    {% endif %}
+
+    {%- if block.settings.image != blank -%}
+      <img src="{{ block.settings.image | img_url: 'master' }}" alt="{{ block.settings.image.alt }}">
+    {%- else -%}
+      {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+    {%- endif -%}
+  </div>
+</div>

@@ -1,0 +1,159 @@
+{% capture form_id %}AddToCartForm-{{ section_id }}{% endcapture %}
+{% form 'product', product, data-productid: product.id, id: form_id, class: 'product-single__form small--text-center' %}
+  <input type="hidden" name="data-product-id" value="{{ product.id }}">
+  {%- unless product.has_only_default_variant -%}
+    {%- for option in product.options_with_values -%}
+      {%- if settings.product_color_swatches -%}
+        {%- assign is_color = false -%}
+        {%- assign color_option_index = 0 -%}
+        {%- assign swatch_trigger = 'products.general.color_swatch_trigger' | t | downcase-%}
+        {%- assign color_option_index = forloop.index0 -%}
+        {%- assign downcased_option = option.name | downcase -%}
+        {%- if downcased_option contains swatch_trigger -%}
+          {%- assign is_color = true -%}
+        {%- elsif swatch_trigger == 'color' and downcased_option contains 'colour' -%}
+          {%- assign is_color = true -%}
+        {%- endif -%}
+      {%- endif -%}
+
+      {%- if variant_type == 'button' -%}
+        {%- render 'variant-button',
+          section_id: section_id,
+          variant_labels_enable: variant_labels_enable,
+          option: option,
+          forloop: forloop,
+          is_color: is_color,
+          color_option_index: color_option_index
+        -%}
+      {%- else -%}
+        {%- render 'variant-dropdown',
+          section_id: section_id,
+          variant_labels_enable: variant_labels_enable,
+          option: option,
+          forloop: forloop
+        -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endunless -%}
+
+  <select name="id" data-productid="{{ product.id }}" id="ProductSelect-{{ section_id }}" class="product-single__variants no-js" data-product-select>
+    {%- for variant in product.variants -%}
+      {%- if variant.available -%}
+        <option value="{{ variant.id }}"{% if variant == product.selected_or_first_available_variant %}
+          selected="selected"{% endif %}>
+          {{ variant.title }} - {{ variant.price | money_with_currency }}
+        </option>
+      {%- else -%}
+        <option disabled="disabled">
+          {{ variant.title }} - {{ 'products.product.sold_out' | t }}
+        </option>
+      {%- endif -%}
+    {%- endfor -%}
+  </select>
+
+
+  
+  <div id="infiniteoptions-container"></div>
+  <span style="color:green; font-size:18px">Ships in 2 - 3 days</span>
+  {%- if enable_dynamic_buttons -%}
+    <div class="payment-buttons">
+  {%- endif -%}
+      <div id="gsAppContainer" class="gs__app-container"></div>
+    <div class="wrapper-btn-product">
+      {%- if quantity_enable -%}
+        <div class="product__quantity product__quantity--{{ variant_type }}">
+          {% comment %}<label for="Quantity-{{ section_id }}" class="variant__label">{{ 'products.product.quantity' | t }}</label>{% endcomment %}
+          
+          <button id="Minus-quantity" type="button">-</button> 
+          <input type="text" id="Quantity-{{ section_id }}" name="quantity" value="1" min="1">
+          <button id="Plus-quantity" type="button">+</button>
+
+        </div>
+      {%- endif -%}
+
+      {%- liquid
+        assign enable_dynamic_buttons = false
+        if enable_payment_button and template != 'product.preorder'
+          assign enable_dynamic_buttons = true
+        endif
+      -%}
+
+        {%- liquid
+          assign default_text = 'products.product.add_to_cart' | t
+          assign button_text = 'products.product.add_to_cart' | t
+          if template == 'product.preorder'
+            assign default_text = 'products.product.preorder' | t
+            assign button_text = 'products.product.preorder' | t
+          endif
+          unless current_variant.available
+            assign button_text = 'products.product.sold_out' | t
+          endunless
+        -%}
+		
+        <div class="wrap-btn-add-cart">
+          <span class="btn-fake"></span>
+          <button
+            {% if product.empty? %}type="button"{% else %}type="submit"{% endif %}
+            name="add"
+            data-add-to-cart
+            class="{% if enable_dynamic_buttons %}btn btn--tertiary{% else %}btn{% endif %} btn--full add-to-cart prevent-multi-click"
+            {% unless current_variant.available %} disabled="disabled"{% endunless %}>
+            <span data-add-to-cart-text data-default-text="{{ default_text }}">
+              {{ button_text }}
+            </span>
+          </button>
+        </div>
+     </div>
+
+  <a href="/pages/subscribe">
+    <div
+     class="btn btn--tertiary btn--full prevent-multi-click"
+     style="margin-top:1em;  
+            justify-content: center; 
+            align-items: center; 
+            box-shadow:none;
+            width:100%;
+            letter-spacing: normal"
+    {% unless current_variant.available %} disabled="disabled"{% endunless %}>
+    <div
+    style="padding-top:4px; padding-right:5px">
+      {% if product.metafields.my_fields.subscribe_button != blank %}
+        {{ product.metafields.my_fields.subscribe_button }}
+      {% else %}  
+        Subscribe and Save up to 47%
+      {% endif %}
+    </div>
+<div 
+    style="font-size:10px;">
+       Monthly refill of any two washes of your choice + 2 FREE BOTTLES
+     </div>
+    </div>
+  </a>
+
+    {%- if enable_dynamic_buttons -%}
+      {{ form | payment_button }}
+    {%- endif -%}
+
+
+  {%- if enable_dynamic_buttons -%}
+    </div>
+  {%- endif -%}
+
+  {%- unless product.empty? -%}
+    <textarea class="hide" aria-hidden="true" data-variant-json>
+      {{ product.variants | json }}
+    </textarea>
+    {%- if product.options.size > 1 -%}
+      <textarea class="hide" aria-hidden="true" data-current-variant-json>
+        {{ current_variant | json }}
+      </textarea>
+    {%- endif -%}
+  {%- endunless -%}
+<ul class="inline-list payment-icons" style="text-align:center;padding-top:10px">
+            {%- for type in shop.enabled_payment_types -%}
+              <li class="icon--payment">
+                {{ type | payment_type_svg_tag }}
+              </li>
+            {%- endfor -%}
+          </ul>
+{% endform %}

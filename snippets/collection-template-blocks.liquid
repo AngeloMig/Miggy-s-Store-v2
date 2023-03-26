@@ -1,0 +1,16 @@
+{%- for block in section.blocks -%}
+	<div {{ block.shopify_attributes }}>
+		 {%- liquid
+          case block.type
+
+            when 'background-image-text'
+              render 'page-block-background-image-text', block: block
+            when 'background-image-video'
+              render 'page-block-background-image-video', block: block
+            when 'bottom-banner'
+               render 'page-block-main-banner', block: block
+
+          endcase
+        -%}
+	</div>
+{%- endfor -%}

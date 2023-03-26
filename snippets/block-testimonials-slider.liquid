@@ -1,0 +1,15 @@
+<div>
+  	<div class="content-testimonials-slider">
+        {% if block.settings.content != blank %}
+          <div class="content-section" style="max-width: {{- block.settings.content_width -}}px;">
+            {{ block.settings.content }}
+          </div>
+        {% endif %}
+
+        {% if block.settings.info != blank %}
+          <div class="info-section">
+            {{ block.settings.info }}
+          </div>
+        {% endif %}
+    </div>
+</div>

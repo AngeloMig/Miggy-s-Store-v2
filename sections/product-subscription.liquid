@@ -1,0 +1,1146 @@
+{%- liquid
+  assign washes_bundle = collections[section.settings.product_subscription]
+  assign washes_bundle_non_gift = all_products [section.settings.product_subscription_non-gift]
+  assign add_ons = collections[section.settings.add_ons]
+-%}
+
+<style>
+
+  html { scroll-behavior: smooth; } 
+
+  #ProductSection-product-subscription .grid {
+    margin-left:0
+  }
+  
+  #ProductSection-product-subscription .grid__item {
+    text-align: center;
+    padding:0;
+  }
+
+  #ProductSection-product-subscription .title {
+    font-size:34px; line-height:42px; letter-spacing: -0.68px;
+    padding-top:39px;
+  }
+
+  #ProductSection-product-subscription .subtitle {
+    font-size:20px; line-height:24px; letter-spacing: -0.4px;
+    padding: 0px 5em;
+    padding-bottom:39px;
+    margin:0 auto;
+    width:600px;
+  }
+
+  #ProductSection-product-subscription .subtitle.gift-checkbox {
+    font-size:18px;
+    display:flex; 
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid #ffdfce;
+    border-bottom: 1px solid #ffdfce;
+    width:80%;
+    margin:1em auto;
+    padding: 1.5em 0
+  }
+  
+  #ProductSection-product-subscription .title-list {
+    display:flex; 
+    align-items: center;
+    justify-content: center;
+    height:60px;
+    padding-left:4em
+  }
+
+  .title-list p {
+    margin: auto 0;
+    font-size:16px;
+    width:240px;
+  }
+
+  .title-list img {
+    image-rendering: -webkit-optimize-contrast;
+    object-fit: contain;
+    padding:13px;
+  }
+
+  .list-container {
+    display:flex
+  }
+
+  .list-container div {
+    width:70px;
+    text-align: center;
+  }
+
+  #ProductSection-product-subscription #next {
+    transition: 0.5s ease;
+  }
+
+  #ProductSection-product-subscription #next:disabled p{
+    background-color: #e1e1e1;
+    cursor:default;
+  }
+
+  .checkbox {
+    padding: 1em;
+    padding-left:2em;
+    border: 1px solid #181800;
+    width:610px;
+    margin:1em auto;
+    cursor:pointer;
+    transition: 0.2s ease;
+  }
+
+  .checkbox.active {
+    background-color: #FFEDDE;
+    border: 1px solid #FFDFCE;
+  }
+
+  .checkbox input[type='radio'] {
+    filter: grayscale(1);
+    height: 24px;
+    width: 24px;
+  }
+
+  .checkbox .badge {
+    font-size: 10px;
+    padding: 1px 8px;
+    margin: 7px 1em;
+    padding-top: 4px;
+    border-radius: 50px;
+    border: 1px solid #181800;
+  }
+
+  .checkbox-container {
+    display:flex; 
+    align-items:center;
+  }
+
+  ul.progress-bar { 
+    padding-inline-start: 0px; 
+    margin-left:0; 
+    position:relative;
+    list-style-type: none;
+    padding-top: 4em;
+  }
+
+  .progress-bar li {
+    width: 128px;
+    display: inline-block;
+    padding: 0 1em;
+    position:relative
+  }
+
+  .progress-bar li:after {
+    content: '';
+    height: 1px;
+    width: 105%;
+    position: absolute;
+    bottom: 47px;
+    z-index: 0;
+    left: 0;
+    background-color: #ffdfce;
+  }
+
+  .progress-bar li:nth-child(1):after {
+    right: -5px;
+    left: unset;
+  }
+
+  .progress-bar li:nth-child(1):after, li:nth-child(4):after {
+    width: 50%;
+  }
+
+  .progress-bar .step {
+    position:relative;
+    z-index:1;
+    margin: 0 auto 0.7em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffdfce;
+    color: white;
+    border-radius: 50px;
+    width: 29px;
+    height: 29px;
+    padding-top: 4px;
+  }
+
+  .progress-bar .active {
+    background-color: black;
+  }
+
+  .product-subscription .btn-section {
+    font-family: inherit;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 19px;
+    letter-spacing: 1px;
+    color: #FFFFFF;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    width: 300px;
+    height:50px;
+    margin: 2em auto;
+    background-color: #181800;
+    padding: 20px;
+    padding-top: 18px;
+    text-transform: uppercase;
+    transition: all .2s;
+    cursor: pointer;
+  }
+
+  .product-subscription.alt .btn-section {
+    background-color: transparent;
+    color:#181800;
+    border:none;
+  }
+
+  .choose-your-washes {
+    width:570px;
+    margin:0 auto;
+  }
+
+  .choose-your-washes-title {
+    position:relative; 
+    width:720px; 
+    margin:0 auto
+  }
+
+  .choose-your-washes-title img {
+    height:90px; position:absolute;right:2em;top:2em
+  }
+
+  .choose-your-washes select, select.add-ons {
+    white-space: normal;
+    border: 1px solid var(--colorTextBody);
+    padding: 10px;
+    padding-right: 25px;
+    text-align:center;
+    text-align: -webkit-center;
+    padding-top: 11px;
+    width: 245px;
+    height: 60px;
+    font-size: 16px;
+    line-height: 19px;
+  }
+
+  .gs__checkbox-image {
+    width: 20px;
+    margin: 0 6px;
+    height: auto;
+    font-size: 0;
+    transform: translateY(-2px);
+  }
+
+  #gift-checkbox {
+    width:20px; height:20px
+  }
+
+  .remove-from-cart.btn-section {
+    text-transform: none;
+    font-size:16px;
+    transform: translateY(-1px);
+    width:245px;
+    padding-top:20px;
+    align-items:center;
+  }
+  
+  .prev-next-btn {
+    display: flex; 
+    justify-content: center; 
+    width: 730px; 
+    margin: 0 auto;
+  }
+
+  .prev-next-btn.last-page {
+    width:760px;
+    justify-content: space-between;
+  }
+
+  .add-ons-container {
+    width:760px;
+    margin:0 auto;
+  }
+
+  .add-ons-container .grid__item {
+    float:none;
+  }
+
+  .add-ons-container img {
+    width:245px;
+  }
+
+@media screen and (max-width:480px) {
+  #ProductSection-product-subscription .title-list {
+    display: block;
+    height: unset;
+    padding-left: unset;
+  }
+}
+
+@media screen and (max-width:768px) {
+
+  button#next, button#prev {
+    padding:0;
+    width:100%;
+  }
+
+  button#next p, button#prev p {
+    width:100%;
+    margin: 1em 0;
+  }
+
+  .add-ons-container, .add-ons-container img, .prev-next-btn.last-page
+  {
+    width:unset;
+  }
+
+  select.add-ons {
+    width:100%
+  }
+
+  .buttons-section.rmv {
+    width:100%;
+    display:block;
+  }
+
+  .remove-from-cart.btn-section {
+    width:unset;
+    margin: 0 !important;
+  }
+
+  .choose-your-washes {
+    width:unset;
+  }
+
+  .choose-your-washes select {
+    width:unset;
+    padding-right:2em;
+  }
+
+  .choose-your-washes-title {
+    width: unset;
+    text-align: center;
+  }
+
+  .choose-your-washes-title img{
+    display:none;
+  }
+
+  #ProductSection-product-subscription .title {
+    width:unset;
+    font-size: 28px;
+    line-height: 30px;
+    letter-spacing: -0.56px;
+    padding: 0 1em;
+  }
+  
+  #ProductSection-product-subscription .subtitle {
+    width:unset;
+    font-size: 18px !important;
+    line-height: 20px;
+    letter-spacing: -0.36px;
+    padding:0;
+  }
+
+  #ProductSection-product-subscription .grid__item.one-half,
+  #ProductSection-product-subscription .grid__item.one-third {
+    width:100%
+  }
+
+  #product-bundle-0-img, #product-bundle-1-img {
+    width:100%;
+    height:100% !important;
+  }
+
+  #ProductSection-product-subscription .subtitle.gift-checkbox {
+    width:100%;
+  }
+
+  #step-3 p.subtitle {
+    padding-bottom:0;
+  }
+
+  .progress-bar .step {
+    height:20px;
+    width:20px;
+    padding-top:5px;
+    font-size:10px;
+  }
+
+  .progress-bar li {
+    padding: 0 10px;
+    font-size:12px;
+    width:unset
+  }
+
+  .progress-bar li:after {
+    bottom:38px;
+  }
+
+  .title-list p {
+    width:unset;
+    font-size:14px;
+  }
+
+  .list-container {
+    height: 4em;
+    /* justify-content: center; */
+    align-items: center;
+  }
+
+  .prev-next-btn {
+    display: block;
+    width: unset;
+  }
+
+  .prev-next-btn.last-page {
+    padding:0;
+  }
+
+  .checkbox {
+    width:unset;
+    padding-left:unset;
+  }
+
+  .checkbox input[type='radio'] {
+    margin-left: 1em;
+  }
+
+  .checkbox-container {
+    display:block;
+  }
+
+  #message {
+    width: 100%;
+    height: 300px;
+  }
+}
+
+</style>
+
+<div style="text-align: center; font-size:14px">
+  <ul class="progress-bar">
+    <li>
+      <div class="step active">1</div>
+      Choose washes
+    </li>
+    <li class="gift" style="display:none">
+      <div class="step">2</div>
+      Length
+    </li>
+    <li class="gift" style="display:none">
+      <div class="step">3</div>
+      Your message
+    </li>
+    <li>
+      <div class="step last">2</div>
+      Add-ons
+    </li>
+<div class="step-line"></div>
+  </ul>
+</div>
+
+<div class="index-section">
+  <div id="ProductSection-{{ section.id }}"
+    data-section-id="{{ section.id }}"
+    data-section-type="product"
+    data-variant-type="{{ section.settings.variant_type }}"
+    {%- if section.settings.inventory_enable -%}
+      data-inventory="true"
+      data-inventory-threshold="{{ section.settings.inventory_threshold }}"
+    {%- endif -%}
+    {%- if section.settings.inventory_transfers_enable -%}
+      data-incoming-inventory="true"
+    {%- endif -%}
+    data-video-style="{{ section.settings.product_video_style }}"
+    {%- if section.settings.product_image_type == 'stacked' -%}
+      data-images-stacked="true"
+    {%- endif -%}>
+
+    <div class="page-width">
+      <div class="grid">
+
+        <div id="step-1">
+
+          <div>
+            <!-- add to proper css styling later -->
+            <div class="choose-your-washes-title">
+                <img src="https://cdn.shopify.com/s/files/1/0259/3459/4127/files/two-free-bottles.png?v=1649299633">
+                <div>
+                  <p class="title" style="text-align:center">2 cans delivered every month</p>
+                  <p class="subtitle" style="font-size:24px;padding-bottom:25px;text-align:center">£24 (save up to 47%)</p>
+                  <p class="subtitle" style="font-size:16px;text-align:center">Get 2 x forever bottles on your first order</p>
+              </div>
+            </div>
+            
+            <div class="title-list">
+              <div class="list-container">
+                <div>
+                  <img src="https://cdn.shopify.com/s/files/1/0259/3459/4127/files/v.svg?v=1648171933"/>
+                </div>
+                <p>Sustainable vegan soap</p>
+              </div>
+
+              <div class="list-container">
+                <div>
+                <img src="https://cdn.shopify.com/s/files/1/0259/3459/4127/files/d.svg?v=1648171933"/>
+                </div>
+                <p>Free delivery</p>
+              </div>
+            </div>
+
+            <div class="title-list">
+              <div class="list-container">
+                <div>
+                <img src="https://cdn.shopify.com/s/files/1/0259/3459/4127/files/p.svg?v=1648171933"/>
+                </div>
+                <p>Pause or cancel at any time</p>
+              </div>
+
+              <div class="list-container">
+                <div>
+                <img src="https://cdn.shopify.com/s/files/1/0259/3459/4127/files/s.svg?v=1648171933"/>
+                </div>
+                <p>Switch washes anytime</p>
+              </div>
+            </div>
+
+            <div class="subtitle gift-checkbox">
+              <input id='gift-checkbox' type="checkbox" />
+              <span>is this a gift?</span>
+              <img class="gs__checkbox-image" src="https://giftship.app/build/assets/images/gift.svg"></img>
+            </div>
+          </div>
+
+          <div class="choose-your-washes">
+            {%- for i in (0..1) -%}
+          
+            <div class="grid__item one-half">
+              <img id="product-bundle-{{i}}-img" src="{{section.settings.image | img_url: 'large'}}" style="height:245px"/>
+              <div>
+                <select id="product-bundle-{{i}}">
+                  {% if i == 0 %}
+                    <option disabled selected value> Choose your first can </option>
+                  {% elsif i == 1 %}
+                    <option disabled selected value> Choose your second can </option>
+                  {%  endif %}
+                  {%- for block in section.blocks -%}
+                    {% assign option = all_products[block.settings.column_product] %}
+                    <option>{{option.title}}</option>
+                  {%- endfor -%}
+                </select>
+              </div>
+            </div>
+
+            {%- endfor -%}
+          </div>
+
+        </div>
+
+        <div id="step-2" style="display:none;">
+          <div style="text-align:center">
+            <p class="title">Choose the length</p>
+            <p class="subtitle">How many months do you want your gift to be delivered?</p>
+          </div>       
+
+          {% for item in washes_bundle.products %}
+          {% assign i = forloop.index %}
+          <div id="checkbox-{{i}}" class="checkbox {% if i == 2 %}active{% endif %}">
+            <div class="checkbox-container">
+              <input id="checkbox-option-{{i}}" type="radio" name="length" {% if i == 2 %} checked="true" {% endif %} value={{ i | times: 3 }}>
+              <div style="flex-basis: 100%">
+                <div style="display:flex; justify-content:space-between; font-size:18px; font-weight: bold; padding:0.5em 1em;">
+                  <div style="padding-top: 6px;">{{ i | times: 3 }} months</div>
+                  <div style="display:inline-flex">
+                    <span style="padding-top: 6px;">{{ item.price | money }} {% if i == 2 %}&middot; MOST POPULAR{% endif %}</span>
+                    {% assign duration = i | times: 3 %}
+                    {% assign price = item.price | divided_by: 100 %}
+                    <div class="badge">SAVE £{{ 30 | times: duration | minus: price }}</div>
+                  </div>
+                </div>
+                <p style="padding:0 1em; font-size:14px;">
+                    Gift {{i | times: 3}} months of delivered botanical washes to their door including 2 forever bottles to start their journey. In addition to smelling amazing, you will also be gifting {{i | times: 3}} less plastic bottles to landfill, and we'll be planting {{i | times: 3}} trees on their behalf - a fantastic step towards circularity and a commitment towards regenerative impact.
+                  </p>
+              </div>
+            </div>
+          </div>
+
+          {% endfor %}
+
+        </div>
+
+        <div id="step-3" style="display:none;">
+          <div style="text-align:center">
+            <p class="title">Gift Card Message</p>
+            <p class="subtitle">Personalise your note here and we'll include this in your first delivery.</p>
+          </div>
+          
+          <div class="page-sections" style="text-align: center;">
+            
+            {%- render 'page-template-blocks', section: section -%}
+  
+              <textarea 
+              id="message"
+              name="properties[gift_card_message]"
+              style="padding:1em; width:610px; border: 2px solid black"
+              placeholder="Enter your message here"></textarea>
+          </div>
+        </div>
+
+        <div id="step-4" class="add-ons-container" style="display:none;">
+          <div style="text-align:center">
+            <p class="title">Add something extra in your cart</p>
+            <p class="subtitle">Need an additional bottle, or another wash? Add it here as a one off or regular delivery.</p>
+          </div>
+
+          <div style="display:flex;flex-wrap:wrap">
+          {%- for product in add_ons.products -%}
+            <div class="grid__item one-third" style="text-align:center">
+              <img src="{{ product.featured_image.src | img_url: 'large' }}"/>
+              <!-- {% if product.tags contains 'Refill' %}
+                <img src="{{ product.images[1].src | img_url: 'large' }}"/>
+              {% else %} -->
+              <!-- {% endif%} -->
+              <div><strong>{{product.title}}</strong></div>
+              <div style="padding-bottom:10px">{{ product.price | money }}</div>
+              <div>
+                <select class='add-ons' id="{{forloop.index}}" style="height:50px; padding:0; text-align:center">
+                  <option disabled selected>Add to cart</option>
+                  <option>Include in Every Shipment</option>
+                  <option>One time Purchase</option>
+                </select>
+                <button id="remove-from-cart-{{forloop.index}}" index={{forloop.index}} style='height:50px;display:none' class="product-subscription rmv buttons-section">
+                  <p class="remove-from-cart btn-section" style="margin:0">Remove from cart</p>
+                </button>
+              </div>
+            </div>
+          
+          {%- endfor -%}
+          </div>
+        </div>
+      </div>
+
+      
+      <div>
+        <a class="prev-next-btn" href="#shopify-section-page-sections-template-subs">
+          <button id="prev" class="product-subscription alt buttons-section" style="display:none;;">
+            <p class="btn-section" style="justify-content:left">&#8592; Back</p>
+          </button>
+          <button id="next" disabled class="product-subscription buttons-section">
+            <p class="btn-section">Next</p>
+          </button>
+        </a>
+    </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.addEventListener('load', e => {
+
+  window.addEventListener( "pageshow", function ( event ) {
+    var historyTraversal = event.persisted || 
+                          ( typeof window.performance != "undefined" && 
+                                window.performance.navigation.type === 2 );
+    if ( historyTraversal ) {
+      // Handle page restore.
+      window.location.reload();
+    }
+  });
+
+  var isSafari = window.safari !== undefined;
+
+  if (isSafari) {
+    // var select = document.getElementsByClassName('add-ons')
+    // var remove = document.getElementsByClassName('.remove-from-cart')
+
+    // for (var i = 0; i < select.length; i++) {
+    //   select[i].style.paddingLeft = "32%"
+    // }
+
+    // for (var i = 0; i < remove.length; i++) {
+    //   remove[i].style.margin = "-4px"
+    //   remove[i].style.transform = "translateY(0px)"
+    //   remove[i].style.paddingTop = "16px"
+    // }
+
+    $('.add-ons').css({ 'padding-left': '32%'})
+    
+    $('.remove-from-cart').css(
+      { 'align-items': 'center',
+        'transform': 'translateY(0px)', 
+        'margin':'-4px'})
+    
+  }
+
+    let bundle = { items: [] },
+        addOns = [],
+        productVariantIds = [],
+        productVariantIdsNonGift = [],
+        previewImages = [""],
+        selectedProductIndex = 0,
+        selectedVariantIndex = 0,
+        isGift = false;
+
+    // temporary prevnext buttons
+    let step = 1; 
+
+    let nextBtn = document.getElementById(`next`)
+    let prevBtn = document.getElementById(`prev`)
+    // end temporary prevnext buttons
+
+    // populates all the available products and variants from the washes bundle collection
+    {% for product in washes_bundle.products %}
+
+      var month = {{ product.title | json }}
+      var product_item = {
+        id: {{ product.id | json }},
+        months: month.split(' ')[3],
+        sellingPlan: {{ product.selling_plan_groups[0].selling_plans[0].id | json }},
+        variants:[]
+      }
+
+      {% for variant in product.variants %}
+
+        var option1 = {{ variant.option1 | json }}
+        var option2 = {{ variant.option2 | json }}
+
+        var variant_item = {
+          id: {{ variant.id | json}}, //the variant id
+          option1: option1.split(' ')[0],
+          option2: option2.split(' ')[0]
+        }
+
+        product_item.variants.push(variant_item)
+
+      {% endfor %}
+
+      productVariantIds.push(product_item);
+
+    {% endfor %}
+
+    console.log(productVariantIds)
+    // END--populates all the available products and variants from the washes bundle collection
+
+    // populates all the available products and variants from the washes bundle non-gift
+    {% for variant in washes_bundle_non_gift.variants %}
+
+    var option1 = {{ variant.option1 | json }}
+    var option2 = {{ variant.option2 | json }}
+
+    var variant_item = {
+      id: {{ variant.id | json}}, //the variant id
+      option1: option1.split(' ')[0],
+      option2: option2.split(' ')[0]
+    }
+
+    productVariantIdsNonGift.push(variant_item)
+    
+    {% endfor %}
+
+    productVariantIdsNonGift.sellingPlan = {{ washes_bundle_non_gift.selling_plan_groups[0].selling_plans[0].id | json }}
+
+    // END--populates all the available products and variants from the washes bundle non-gift
+
+    console.log({{add_ons.products | json}})
+
+    // Populates add-ons
+    {% for product in add_ons.products %}
+      addOns.push({ quantity:1, 
+          sellingPlan: {{ product.selling_plan_groups[0].selling_plans[0].id | json }}, 
+          id: {{ product.variants[0].id }} 
+        })
+    {% endfor %}
+
+    {% for block in section.blocks %}
+
+      {% assign image = block.settings.image %}
+      {% assign option = all_products[block.settings.column_product] %}
+
+      {% if image != blank %}
+        previewImages.push({{ image | json }})
+      {% else %}
+        previewImages.push({{ option.featured_image | json }})
+      {% endif %}
+
+    {% endfor %}
+
+    // cans
+    for (let i=0;i<=1;i++) {
+      document.getElementById(`product-bundle-${i}`)
+              .addEventListener('change', (e) => {
+  
+            document.getElementById(`product-bundle-${i}-img`).src 
+            = previewImages[e.target.selectedIndex]
+
+            assignVariant()
+          })
+    }
+
+  document.getElementById('gift-checkbox').addEventListener('change', e => {
+
+    isGift = e.target.checked
+
+    var x = document.getElementsByClassName('gift')
+
+    if (e.target.checked) {
+      $('.progress-bar .step.last').text('4');
+      for (i = 0; i < x.length; i++) {
+        x[i].style.display = 'inline-block';
+      }
+    } else {
+      $('.progress-bar .step.last').text('2');
+      for (i = 0; i < x.length; i++) {
+        x[i].style.display = 'none';
+      }      
+    }
+  })
+
+  $('.add-ons-container').on('change', 'select', e=> {
+    var option = e.currentTarget
+    $(`.add-ons#${option.id}`).hide();
+    $(`#remove-from-cart-${option.id}`).show();
+
+  })
+
+  $('.add-ons-container').on('click', 'button', e=> {
+    console.log(e.currentTarget.getAttribute('index'))
+
+    var option = e.currentTarget.getAttribute('index')
+
+    $(`.add-ons#${option}`)[0].selectedIndex = 0;
+    $(`.add-ons#${option}`).show();
+    $(`#remove-from-cart-${option}`).hide();
+  })
+
+    // for (var i = 1; i <= 3; i++) {
+    //   $(`#checkbox-${i}`).click(()=>{
+    //     $(".checkbox").removeClass("active");
+    //     $(`#checkbox-${i}`).addClass("active");
+    //     $(`#checkbox-option-${i}`)[0].checked = true;
+    //   })
+    // }
+
+    $(`#checkbox-1`).on('click', ()=>{
+      $(".checkbox").removeClass("active");
+      $(`#checkbox-1`).addClass("active");
+      $(`#checkbox-option-1`)[0].checked = true;
+      assignVariant();
+    })
+
+    $(`#checkbox-2`).on('click', ()=>{
+      $(".checkbox").removeClass("active");
+      $(`#checkbox-2`).addClass("active");
+      $(`#checkbox-option-2`)[0].checked = true;
+      assignVariant();
+    })
+
+    $(`#checkbox-3`).on('click', ()=>{
+      $(".checkbox").removeClass("active");
+      $(`#checkbox-3`).addClass("active");
+      $(`#checkbox-option-3`)[0].checked = true;
+      assignVariant();
+    })
+    // end temp checkbox
+
+    // temporary next btn
+    nextBtn.addEventListener('click', (e)=> {
+
+      document.getElementById(`prev`).style.display = "block";
+
+      if (step==1 && !isGift) {
+        step = 3;
+        document.getElementById(`step-1`).style.display = "none";
+      }
+
+      if (step == 3) {
+        $('#next p').text('GO TO CART')
+        $('.prev-next-btn').addClass('last-page')
+      }
+
+      if (step == 4) {
+        createCartObject()
+
+      } else {
+        document.getElementById(`step-${step}`).style.display = "none";
+        document.getElementById(`step-${step + 1}`).style.display = "block";
+        step = step + 1;
+        setActive()
+      }
+
+    })
+
+    // temporary prev btn
+    prevBtn.addEventListener('click', (e)=> {
+
+      if (step == 2) {
+        document.getElementById(`prev`).style.display = "none";
+      }
+      
+      if (step == 4) {
+        document.getElementById(`next`).style.display = "block";
+        $('.prev-next-btn').removeClass('last-page')
+        $('#next p').text('NEXT');
+        
+        if (!isGift) {
+          document.getElementById(`prev`).style.display = "none";
+          document.getElementById(`step-4`).style.display = "none";
+          step = 2;
+        }
+      }
+
+      document.getElementById(`step-${step}`).style.display = "none";
+      document.getElementById(`step-${step - 1}`).style.display = "block";
+      step = step - 1;
+      setActive()
+    })
+
+    function assignVariant() {
+
+      let can1 = document.getElementById('product-bundle-0').value.split(' ')[0]
+      let can2 = document.getElementById('product-bundle-1').value.split(' ')[0]
+      selectedCan = [can1, can2];
+
+      console.log(selectedCan)
+
+      if ( selectedCan[0] == '' || selectedCan[1] == '' ) {
+          document.getElementById('next').setAttribute("disabled","disabled");
+        } else {
+          document.getElementById('next').removeAttribute("disabled");
+      
+        }
+      }
+
+    function getGiftSubscription() {
+
+      var selected_duration = $('input[name="length"]:checked').val();
+
+      for ( i = 0; i <= productVariantIds.length-1; i++ ){
+        if (productVariantIds[i].months==selected_duration) {
+          
+          selectedProductIndex = i
+
+          for ( j = 0; j <= productVariantIds[i].variants.length-1; j++ ) {
+
+            var productList_can1 = productVariantIds[i].variants[j].option1
+            var productList_can2 = productVariantIds[i].variants[j].option2
+
+            if (selectedCan[0]==productList_can1 && selectedCan[1]==productList_can2) {
+              
+              selectedVariantIndex = j
+
+              console.log("Selected variant: " + productVariantIds[selectedProductIndex].variants[selectedVariantIndex].id)
+            }
+          }
+        }
+      }
+    }
+
+    function getNonGiftSubscription() {
+
+      for ( i = 0; i <= productVariantIdsNonGift.length-1; i++ ) {
+
+        var productList_can1 = productVariantIdsNonGift[i].option1
+        var productList_can2 = productVariantIdsNonGift[i].option2
+
+        if (selectedCan[0]==productList_can1 && selectedCan[1]==productList_can2) {
+          
+          selectedVariantIndex = i
+
+        }
+      }
+
+    }
+
+    function setActive() {
+
+      for (i = 1; i <= 4; i++) {
+        $(`.progress-bar li:nth-child(${i}) .step`).removeClass('active')
+      }
+
+      for (i = 1; i <= step; i++) {
+        $(`.progress-bar li:nth-child(${i}) .step`).addClass('active')
+      }
+    }
+
+    function createCartObject() {
+
+      if (isGift) {
+
+        getGiftSubscription()
+
+        let variant = {
+          quantity: 1,
+          selling_plan: productVariantIds[selectedProductIndex].sellingPlan,
+          id: productVariantIds[selectedProductIndex].variants[selectedVariantIndex].id,
+          properties: {
+                Message: document.getElementById('message').value
+              }
+          }
+          
+        bundle.items.push(variant);
+
+      } else {
+
+        getNonGiftSubscription()
+
+        let variant = {
+          quantity: 1,
+          id: productVariantIdsNonGift[selectedVariantIndex].id,//variantId
+          selling_plan: productVariantIdsNonGift.sellingPlan
+        }
+
+        bundle.items.push(variant);
+
+      }
+      
+      // add ons
+      let add_on_items = document.getElementsByClassName('add-ons');
+
+      addOns.map((item, idx) => {
+        
+        if(add_on_items[idx].value != "Add to cart") {
+          
+          if(add_on_items[idx].value == "Include in Every Shipment") {
+            item.selling_plan = addOns[idx].sellingPlan
+          }
+          
+          bundle.items.push(item)
+        }
+      })
+
+      addItemsToCart(bundle);
+
+    }
+    
+    function addItemsToCart(data) {
+
+      console.log(data)
+      console.log(JSON.stringify(data))
+
+      jQuery.ajax({
+        type: 'POST',
+        url: '/cart/add.js',
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+          },
+        data: JSON.stringify(data),
+        dataType: 'json',
+      }).then(()=>{
+      window.location.href = '/cart';
+      }).catch(err=>{
+        console.log(err.status + ": " + err.responseText)
+      });
+    }
+
+})
+
+</script>
+
+{% schema %}
+  {
+    "name": "Product Subscription",
+    "settings":       
+    [
+    {
+      "type": "collection",
+      "id": "product_subscription",
+      "label": "Gifting Washes Bundle Collection"
+    },
+    {
+      "type": "product",
+      "id": "product_subscription_non-gift",
+      "label": "Non-Gifting Washes Bundle"
+    },
+    {
+      "type": "collection",
+      "id": "add_ons",
+      "label": "Add-ons"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Placeholder Image"
+    }
+    ],
+    "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "column_product",
+          "label": "Product"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Product Display Image"
+        }
+      ]
+    },
+    {
+      "type": "rich-text",
+      "name": "Rich text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Rich text block"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Use this section for any descriptive text you need to fill out your pages or to add introductory headings between other blocks.</p>"
+        },
+        {
+          "type": "select",
+          "id": "align_text",
+          "label": "Text alignment",
+          "default": "center",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Centered"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "narrow_column",
+          "label": "Narrow column",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "enlarge_text",
+          "label": "Enlarge text"
+        },
+        {
+          "type": "checkbox",
+          "id": "alt",
+          "label": "Use alternate section color"
+        }
+      ]
+    }
+    ],
+    "presets": [
+      {
+        "name": "Product Subscription",
+        "category": "Product"
+      }
+    ]
+  }
+{% endschema %}

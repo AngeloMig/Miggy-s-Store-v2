@@ -1,0 +1,119 @@
+<div class="inner-section">
+  <div class="hun-container">
+    {% if section.settings.section_title != blank %}
+      <h3 class="title-section section-header__title" style="max-width: {{- section.settings.title_width -}}px;">
+        {{ section.settings.section_title }}
+      </h3>
+    {% endif %}
+
+    <div class="hun-row {{ section.settings.num_column }}">
+      {%- for block in section.blocks -%}
+        {%- assign product = all_products[block.settings.column_product] -%}
+        {%- assign current_variant = product.selected_or_first_available_variant -%}
+      
+        <div class="hun-col">
+          <div class="item-product">
+            <a href="{{ product.url }}" class="pic-pro">
+              <span {% if product.images != blank %}
+              style="background-image: url({{ product | img_url: 'master' }});" 
+            {% endif %}></span>
+            </a>
+
+            <div class="text-pro">
+              <h4 class="title-pro">
+                {% unless product == empty %}
+                  <a href="{{ product.url }}">{{ product.title }}</a>
+                {% else %} 
+                  Product title
+                {% endunless %}
+              </h4>
+              <div class="price-pro">{{ current_variant.price | money }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+
+{% schema %}
+  {
+    "name": "Products column",
+    "class": "products-column",
+    "settings": [
+      {
+        "type": "text",
+        "id": "section_title",
+        "label": "Section title",
+        "default": "Products column"
+      },
+      {
+        "type": "range",
+        "id": "title_width",
+        "label": "Title width",
+        "default": 1260,
+        "min": 100,
+        "max": 1260,
+        "step": 20,
+        "unit": "px"
+      },
+      {
+        "type": "select",
+        "id": "num_column",
+        "label": "Number of columns",
+        "default": "set-3-col",
+        "options": [
+          {
+            "value": "set-2-col",
+            "label": "2 column"
+          },
+          {
+            "value": "set-3-col",
+            "label": "3 column"
+          },
+          {
+            "value": "set-4-col",
+            "label": "4 column"
+          },
+          {
+            "value": "set-5-col",
+            "label": "5 column"
+          }
+        ]
+      }
+    ],
+    "blocks": [
+      {
+        "type": "product",
+        "name": "Product",
+        "settings": [
+          {
+            "type": "product",
+            "id": "column_product",
+            "label": "Product"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Products column",
+        "category": "Kankan section",
+        "blocks": [
+          {
+            "type": "product"
+          },
+          {
+            "type": "product"
+          },
+          {
+            "type": "product"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,175 @@
+<div class="inner-section" style="background-color: {{ section.settings.color_bg }}; color: {{ section.settings.color_text }};" data-section-type="testimonial-sliders">
+  <div class="hun-container">
+    
+    <div id="Testimonial-{{section.id}}" 
+         class="testimonial-sliders"
+         data-id={{section.id}}
+         data-item={{section.settings.item_show}}
+         data-dost={{section.settings.show_dots}}
+         data-nav = {{section.settings.show_nav}}
+         data-auotplay={{section.settings.slider_autoplay}}
+    >
+      {% for block in section.blocks %}
+          {%- liquid 
+              case block.type
+                   when 'testimonials-slider'
+                      render 'block-testimonials-slider', block: block
+              endcase        
+          -%}
+      {% endfor %}
+    </div>
+    <div class="list-brands">
+      {%- for block in section.blocks -%}
+         {%- liquid
+          case block.type
+
+            when 'image'
+              render 'block-brands-item', block: block
+
+          endcase
+        -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+
+{% schema %}
+  {
+    "name": "Text with brands",
+    "class": "text-with-brands",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_bg",
+        "label": "Background color",
+        "default": "#FFDFCE"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Text color",
+        "default": "#181800"
+      },
+      {
+        "type" : "header",
+        "content" : "Settings Testimonials Slider"
+      },
+      {
+        "type": "select",
+        "id": "item_show",
+        "label": "Item show",
+        "default": "1",
+        "options": [
+            {
+               "value": "1",
+               "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            }
+        ]  
+      },
+      {
+        "type": "checkbox",
+        "id": "show_dots",
+        "label": " Show dots",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "slider_autoplay",
+        "label": "Autoplay",
+        "default": false
+      },
+     {
+       "type": "checkbox",
+       "id": "show_nav",
+       "label": "Prev/Next Arrows",
+       "default": false
+     }
+    ],
+    "blocks": [
+      {
+        "type": "image",
+        "name": "Brand",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "range",
+            "id": "brand_width",
+            "label": "Brand width",
+            "default": 160,
+            "min": 50,
+            "max": 500,
+            "step": 10,
+            "unit": "px"
+          },
+          {
+            "type": "url",
+            "id": "brand_link",
+            "label": "Brand Link"
+          }
+        ]
+      },
+      {
+        "type" : "testimonials-slider",
+        "name" : "Testimonials Slider",
+        "settings" : [
+            {
+              "type": "richtext",
+              "id": "content",
+              "label": "Content",
+              "default": "<p>This is content of the text with brands section</p>"
+            },
+            {
+              "type": "range",
+              "id": "content_width",
+              "label": "Content width",
+              "default": 1260,
+              "min": 100,
+              "max": 1260,
+              "step": 20,
+              "unit": "px"
+            },
+            {
+              "type": "richtext",
+              "id": "info",
+              "label": "Info",
+              "default": "<p>This is info of the section</p>"
+            }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Text with brands",
+        "category": "Kankan section",
+        "blocks": [
+          {
+            "type": "image"
+          },
+          {
+            "type": "image"
+          },
+          {
+            "type": "image"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

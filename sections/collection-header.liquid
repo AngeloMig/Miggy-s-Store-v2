@@ -1,0 +1,306 @@
+
+
+{% if section.settings.show_section %}
+
+
+
+{%- if section.settings.collection_image_enable and collection.image -%}
+
+  <div class="collection-head_image lazyload" 
+
+    data-sizes="auto"
+
+    style="min-height: {{ collection.image.height  }}px;
+
+           background: url({{ collection.image | img_url: 'master' }}) top left no-repeat; 
+
+           background-size: cover; background-position: center center;" >
+
+    <noscript>
+
+      <div
+
+        class="collection-head_image"
+
+        style="background-image: url({{ collection.image | img_url: 'master' }});";
+
+        ></div>
+
+    </noscript>
+
+
+
+    <div class="collection-hero__content">
+
+      <div class="page-width">
+
+        <div class="hero__text-shadow-off" data-aos>
+
+          <header class="section-header section-header--hero" data-aos>
+
+            <h1 class="section-header__title appear-delay">
+
+              {{ section.settings.title_collection }}
+
+            </h1>
+
+
+
+            {%- if collection.metafields.subtitles.size > 0 %}
+
+               <h3 class="section-header__subtitle">
+
+                 {{ collection.metafields.subtitles.Subtitle }}
+
+               </h3> 
+
+            {%- endif -%}
+
+          </header>
+
+          {%- if collection.description != blank and section.settings.description_enable -%}
+
+            {%- assign desc_length = collection.description | size -%}
+
+            <div class="rte section-header__description{% if desc_length < 200 %} section-header__description--large{% endif %} appear-delay-1">
+
+              {{ collection.description }}
+
+            </div>
+
+          {%- endif -%}
+
+          {% if section.settings.button_link != blank and section.settings.btn_shop != blank %}
+
+               <a href="{{ section.settings.button_link }}" class="btn btn-default"> {{ section.settings.btn_shop }} </a>
+
+          {% endif %}
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+{%- else -%}
+
+  <div class="page-width page-content page-content--flush-bottom">
+
+    <header class="section-header" data-aos>
+
+      <h1 class="section-header__title appear-delay">
+
+        {{ section.settings.title_collection }}
+
+      </h1>
+
+
+
+        <div class="rte section-header__description">
+
+          {{ section.settings.desc_collection }}
+
+        </div>
+
+
+    </header>
+
+  </div>
+
+{%- endif -%}
+
+
+
+ <style>
+
+    .collection-hero__content .section-header__title{
+
+        max-width: {{ section.settings.max_width_title }}px ;
+
+        text-align: {{ section.settings.collection_align_text }};
+
+    }
+
+    .collection-hero__content .section-header__description{
+
+       max-width: {{ section.settings.max_width_subtitle }}px ;
+
+       text-align: {{ section.settings.collection_align_text }};
+
+       margin-left:0px;
+
+    }
+
+ </style> 
+
+
+
+ {% endif %}
+
+
+
+
+
+{% schema %}
+
+  {
+
+    "name": "Collection header",
+
+    "settings": [
+
+      {
+
+        "type": "checkbox",
+
+        "id": "show_section",
+
+        "label": "Show section",
+
+        "default": true
+
+      },
+
+      {
+
+        "type": "checkbox",
+
+        "id": "collection_image_enable",
+
+        "label": "Show collection image",
+
+        "default": true
+
+      },
+            {
+
+        "type": "text",
+
+        "id": "title_collection",
+
+        "label": "Title Collection"
+
+      },
+
+      {
+
+        "type": "richtext",
+
+        "id": "desc_collection",
+
+        "label": "Description Collection"
+
+      },
+
+      {
+
+        "type": "range",
+
+        "id": "max_width_title",
+
+        "min": 500,
+
+        "max": 1300,
+
+        "step": 50,
+
+        "unit": "px",
+
+        "label": "Max Width Title",
+
+        "default": 750
+
+      },
+
+      {
+
+        "type": "range",
+
+        "id": "max_width_subtitle",
+
+        "min": 500,
+
+        "max": 1300,
+
+        "step": 50,
+
+        "unit": "px",
+
+        "label": "Max Width SubTitle",
+
+        "default": 700
+
+      },
+
+      {
+
+        "type": "select",
+
+        "id": "collection_align_text",
+
+        "label": "Align text",
+
+        "options": [
+
+          {
+
+            "value": "left",
+
+            "label": "Left"
+
+          },
+
+          {
+
+            "value": "center",
+
+            "label": "Center"
+
+          }
+
+        ],
+
+        "default": "left"
+
+      },
+
+      {
+
+        "type": "checkbox",
+
+        "id": "description_enable",
+
+        "label": "Show description in header",
+
+        "default": true
+
+      },
+
+      {
+
+        "type": "text",
+
+        "id": "btn_shop",
+
+        "label": "Label Button"
+
+      },
+
+      {
+
+        "type": "url",
+
+        "id": "button_link",
+
+        "label": "Button link"
+
+      }
+
+    ]
+
+  }
+
+{% endschema %}
+

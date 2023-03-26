@@ -1,0 +1,196 @@
+
+
+
+<div class="inner-section" style="width: {{- section.settings.section_width -}}px;">
+  <div class="hun-container">
+    {% if section.settings.section_title != blank %}
+      <h3 class="title-section section-header__title" style="max-width: {{- section.settings.title_width -}}px;">
+        {{ section.settings.section_title }}
+      </h3>
+    {% endif %}
+
+    <div class="hun-row {{ section.settings.num_column }}">
+      {%- for block in section.blocks -%}
+      
+        <div class="hun-col">
+          <div class="sec-item">
+            <div class="pic-item">
+              <div class="wrap-pic {% if block.settings.rounded_image %}rounded-image{% endif %}" style="max-width: {{- block.settings.image_width -}}px;">
+                {% if block.settings.item_link != blank %}
+                  <a href="{{ block.settings.item_link }}"></a>
+                {% endif %}
+
+                {%- if block.settings.image != blank -%}
+                  <img src="{{ block.settings.image | img_url: 'master' }}" alt="{{ block.settings.image.alt }}">
+                {%- else -%}
+                  {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                {%- endif -%}
+              </div>
+            </div>
+
+            <div class="text-item">
+              {%- if block.settings.item_title != blank -%}
+                <h3 class="title-item">
+                  {% if block.settings.item_link != blank %}
+                    <a href="{{ block.settings.item_link }}">{{ block.settings.item_title }}</a>
+                  {% else %}
+                    {{ block.settings.item_title }}
+                  {% endif %}
+                </h3>
+              {%- endif -%}
+
+              {%- if block.settings.item_des != blank -%}
+                <div class="des-item">{{ block.settings.item_des }}</div>
+              {%- endif -%}    
+            </div>
+          </div>
+        </div>
+
+      {%- endfor -%}
+    </div>
+
+    {% if section.settings.button_label != blank %}
+      <div class="buttons-section">
+        <a class="btn-section" href="{{ section.settings.button_link }}">{{ section.settings.button_label }}</a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+
+{% schema %}
+  {
+    "name": "Image with text column",
+    "class": "image-with-text-column",
+    "settings": [
+      {
+        "type": "range",
+        "id": "section_width",
+        "label": "Section width",
+        "default": 1240,
+        "min": 500,
+        "max": 1300,
+        "step": 20,
+        "unit": "px"
+      },
+      {
+        "type": "text",
+        "id": "section_title",
+        "label": "Section title",
+        "default": "Image with text column"
+      },
+      {
+        "type": "range",
+        "id": "title_width",
+        "label": "Title width",
+        "default": 1260,
+        "min": 100,
+        "max": 1260,
+        "step": 20,
+        "unit": "px"
+      },
+      {
+        "type": "text",
+        "id": "button_label",
+        "label": "Button label",
+        "default": "Button"
+      },
+      {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button link"
+      },
+      {
+        "type": "select",
+        "id": "num_column",
+        "label": "Number of columns",
+        "default": "set-3-col",
+        "options": [
+          {
+            "value": "set-2-col",
+            "label": "2 column"
+          },
+          {
+            "value": "set-3-col",
+            "label": "3 column"
+          },
+          {
+            "value": "set-4-col",
+            "label": "4 column"
+          },
+          {
+            "value": "set-5-col",
+            "label": "5 column"
+          }
+        ]
+      }
+    ],
+    "blocks": [
+      {
+        "type": "text_block",
+        "name": "Item",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "range",
+            "id": "image_width",
+            "label": "Image width",
+            "default": 650,
+            "min": 60,
+            "max": 650,
+            "step": 10,
+            "unit": "px"
+          },
+          {
+            "type": "checkbox",
+            "id": "rounded_image",
+            "label": "Rounded image",
+            "default": false
+          },
+          {
+            "type": "header",
+            "content": "Text"
+          },
+          {
+            "type": "text",
+            "id": "item_title",
+            "label": "Item title",
+            "default": "Example title"
+          },
+          {
+            "type": "richtext",
+            "id": "item_des",
+            "label": "Description",
+            "default": "<p>This is description of the item.</p>"
+          },
+          {
+            "type": "url",
+            "id": "item_link",
+            "label": "Item Link"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Image with text column",
+        "category": "Kankan section",
+        "blocks": [
+          {
+            "type": "text_block"
+          },
+          {
+            "type": "text_block"
+          },
+          {
+            "type": "text_block"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

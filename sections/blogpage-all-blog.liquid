@@ -1,0 +1,177 @@
+
+<div class="inner-section js-pagi-custom-blog" data-page-now="in-page-1">
+  <div class="hun-container">
+      {% if section.settings.section_title != blank %}
+        <h2 class="title-sec" style="max-width: {{ section.settings.title_width }}px;">
+          {{ section.settings.section_title }}
+        </h2>
+      {% endif %}
+        
+      <div class="hun-row set-2-col">
+        {% assign count = 0  %}
+        {% assign count_page = 1  %}
+        {% assign count_page_temp = 0  %}
+        {% assign limit = section.settings.num_posts | times: 1 %}
+        {% assign tag_keys = section.settings.tag_keys | downcase %}
+        
+        {% for link in linklists[section.settings.blog_link_list].links %}
+          {% assign blog = link.object %} 
+          {% for article in blog.articles %}
+            
+            
+            {% for tag in article.tags  %}
+              {% assign downcase_tag = tag | downcase %}
+
+              {% if tag_keys contains downcase_tag %}
+                <div class="hun-col in-page-{{ count_page }}">
+                  <div class="inner-item">
+                    <div class="pic-item">
+                      {%- if article.image -%}
+                      <a href="{{ article.url }}" class=" holder-image" style="background-image: url({{ article.image | img_url: '800x' }});" title="{{ article.title }}"></a>
+                      {%- endif -%}
+                    </div>
+
+                    <div class="text-item">
+                        <div class="subtitle-item">
+                          <a href="{{ blogs[handle].url }}">
+                            {{ blog.title }}
+                          </a>
+                        </div>
+
+                      {%- if article.title != blank -%}
+                        <h3 class="title-item" style="max-width: {{ section.settings.title_max_w }}px;">
+                          <a href="{{ article.url }}" title="{{ article.title }}">
+                            {{ article.title }}
+                          </a>
+                        </h3>
+                      {%- endif -%}
+
+                      {%- if article.excerpt != blank -%}
+                        <div class="des-item" style="max-width: {{ section.settings.description_max_w }}px;">
+                          {{ article.excerpt | strip_html }}
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                </div> 
+
+                {% assign count = count | plus: 1  %}
+                {% assign count_page_temp = count_page_temp | plus: 1  %}
+
+                {% if count_page_temp == limit %}
+                  {% assign count_page_temp = 0  %}
+                  {% assign count_page = count_page | plus: 1  %}
+                {% endif %}
+
+                {% break %}
+              {% endif %}
+            {% endfor %}
+
+          {% endfor %}
+        {% endfor %}
+      </div>
+      
+      {% assign temp1 = count_page | minus: 1  %}
+      {% assign temp2 = temp1 | times: limit  %}
+      {% if temp2 == count %}
+        {% assign count_page = count_page | minus: 1  %}
+      {% endif %}
+     
+      {% if count_page > 1 %}
+        <div class="loop-pagination">
+          <ul>
+            <li>
+              <a class="prev item-pagi" href="#"></a>
+            </li>
+
+            {% for i in (1..count_page) %}
+              <li>
+                <a class="page-numbers item-pagi {% if i == 1 %}current{% endif %}" href="#" data-page="in-page-{{ i }}">{{ i }}</a>
+              </li> 
+            {% endfor %}
+
+            <li>
+              <a class="next item-pagi" href="#"></a>
+            </li>
+          </ul>
+        </div>
+      {% endif %}
+  </div>
+</div>
+
+<div style="height: {{ section.settings.space_bottom }}px;"></div> 
+
+{% schema %}
+  {
+    "name": "All blog",
+    "class": "hun-all-blog",
+    "settings": [
+      {
+        "type": "link_list",
+        "id": "blog_link_list",
+        "label": "Blog links list"
+      },
+      {
+        "type": "text",
+        "id": "tag_keys",
+        "label": "Show article by tags",
+        "info": "Please, Each tag is separated by a comma. (Ex: tag1,tag2,tag3)"
+      },
+      {
+        "type": "range",
+        "id": "num_posts",
+        "label": "Num of posts",
+        "default": 4,
+        "min": 2,
+        "max": 20,
+        "step": 2
+      },
+      {
+        "type": "text",
+        "id": "section_title",
+        "label": "Section title",
+        "default": "Title"
+      },
+      {
+        "type": "range",
+        "id": "title_width",
+        "label": "Section title width",
+        "default": 1260,
+        "min": 100,
+        "max": 1260,
+        "step": 20,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "title_max_w",
+        "label": "Post title max width",
+        "default": 330,
+        "min": 50,
+        "max": 600,
+        "step": 10,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "description_max_w",
+        "label": "Post description max width",
+        "default": 330,
+        "min": 50,
+        "max": 600,
+        "step": 10,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "space_bottom",
+        "label": "More bottom space",
+        "default": 100, 
+        "min": 0,
+        "max": 150,
+        "step": 2,
+        "unit": "px"
+      }
+    ]
+  }
+{% endschema %}

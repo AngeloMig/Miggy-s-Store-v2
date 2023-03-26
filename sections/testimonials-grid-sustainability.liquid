@@ -1,0 +1,267 @@
+<div class="inner-section">
+  <div class="hun-container">
+    {% if section.settings.section_title != blank %}
+      <h3 class="title-section" style="max-width: {{- section.settings.title_width -}}px;">
+        {{ section.settings.section_title }}
+      </h3>
+    {% endif %}
+
+    <div class="hun-row {{ section.settings.num_column }}">
+      {%- for block in section.blocks -%}
+      
+        <div class="hun-col">
+          <div class="item-tes">
+            <div class="star-tes">
+              {% if block.settings.star == "0" %}
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+              {% elsif block.settings.star == "0.5" %}
+                <i class="fas fa-star-half-alt"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+              {% elsif block.settings.star == "1" %}
+                <i class="fas fa-star"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+              {% elsif block.settings.star == "1.5" %}
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+              {% elsif block.settings.star == "2" %}
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+              {% elsif block.settings.star == "2.5" %}
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+              {% elsif block.settings.star == "3" %}
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+              {% elsif block.settings.star == "3.5" %}
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+                <i class="far fa-star"></i>
+              {% elsif block.settings.star == "4" %}
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="far fa-star"></i>
+              {% elsif block.settings.star == "4.5" %}
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+              {% else %}
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              {% endif %}
+            </div>
+
+            {%- if block.settings.name_author != blank -%}
+              <h4 class="author">
+                {{ block.settings.name_author }}
+              </h4>
+            {%- endif -%}
+
+            {%- if block.settings.info_author != blank -%}
+              <div class="info">
+                {{ block.settings.info_author }}
+              </div>
+            {%- endif -%}
+
+            {%- if block.settings.review_content != blank -%}
+              <div class="content">
+                {{ block.settings.review_content }}
+              </div>
+            {%- endif -%}    
+          </div>
+        </div>
+
+      {%- endfor -%}
+    </div>
+
+    {% if section.settings.button_label != blank %}
+      <div class="buttons-section">
+        <a class="btn-section" href="{{ section.settings.button_link }}">{{ section.settings.button_label }}</a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+<div style="height: {{ section.settings.space_bottom }}px;"></div>
+
+{% schema %}
+  {
+    "name": "Testimonials grid",
+    "class": "testimonials-grid",
+    "settings": [
+      {
+        "type": "text",
+        "id": "section_title",
+        "label": "Section title"
+      },
+      {
+        "type": "range",
+        "id": "title_width",
+        "label": "Title width",
+        "default": 1260,
+        "min": 100,
+        "max": 1260,
+        "step": 20,
+        "unit": "px"
+      },
+      {
+        "type": "select",
+        "id": "num_column",
+        "label": "Number of columns",
+        "default": "set-3-col",
+        "options": [
+          {
+            "value": "set-2-col",
+            "label": "2 column"
+          },
+          {
+            "value": "set-3-col",
+            "label": "3 column"
+          },
+          {
+            "value": "set-4-col",
+            "label": "4 column"
+          },
+          {
+            "value": "set-5-col",
+            "label": "5 column"
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "space_bottom",
+        "label": "More bottom space",
+        "default": 0, 
+        "min": 0,
+        "max": 150,
+        "step": 2,
+        "unit": "px"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "review",
+        "name": "Review",
+        "settings": [
+          {
+            "type": "select",
+            "id": "star",
+            "label": "Review star",
+            "default": "5",
+            "options": [
+              {
+                "value": "0",
+                "label": "0"
+              },
+              {
+                "value": "0.5",
+                "label": "0.5"
+              },
+              {
+                "value": "1",
+                "label": "1"
+              },
+              {
+                "value": "1.5",
+                "label": "1.5"
+              },
+              {
+                "value": "2",
+                "label": "2"
+              },
+              {
+                "value": "2.5",
+                "label": "2.5"
+              },
+              {
+                "value": "3",
+                "label": "3"
+              },
+              {
+                "value": "3.5",
+                "label": "3.5"
+              },
+              {
+                "value": "4",
+                "label": "4"
+              },
+              {
+                "value": "4.5",
+                "label": "4.5"
+              },
+              {
+                "value": "5",
+                "label": "5"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "id": "name_author",
+            "label": "Author name",
+            "default": "AUTHOR NAME"
+          },
+          {
+            "type": "text",
+            "id": "info_author",
+            "label": "Author info",
+            "default": "Author info"
+          },
+          {
+            "type": "richtext",
+            "id": "review_content",
+            "label": "Review content",
+            "default": "<p>This is review content.</p>"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Testimonials grid Sustainability",
+        "category": "Kankan section",
+        "blocks": [
+          {
+            "type": "review"
+          },
+          {
+            "type": "review"
+          },
+          {
+            "type": "review"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

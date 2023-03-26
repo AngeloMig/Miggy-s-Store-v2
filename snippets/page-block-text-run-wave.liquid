@@ -1,0 +1,45 @@
+{%- liquid
+  assign overlap_images = true
+  if block.settings.image_desktop != blank and block.settings.image_mobile == blank
+    assign overlap_images = false
+  endif
+-%}
+
+<div class="feature-row-wrapper show-text-wave">
+  {%- capture image_layout -%}
+      {%- if block.settings.image_desktop != blank -%}
+          
+            <div class="img-show-desktop" >
+                <img class="feature-row__image lazyload"
+                src="{{ block.settings.image_desktop | img_url: 'master'}}" 
+                alt="{{ block.settings.image_desktop.alt }}">
+                {%- if block.settings.text_banner != blank -%}
+                    <div class="text-wave" >
+                        {{ block.settings.text_banner }}
+                    </div>
+                {%- endif -%}
+            </div>
+      {%- endif -%}
+      {%- if block.settings.image_mobile != blank -%}
+            <div class="img-show-mobile" >
+              <img class="feature-row__image lazyload"
+                src="{{ block.settings.image_mobile | img_url: 'master'}}" 
+                alt="{{ block.settings.image_mobile.alt }}">
+                {%- if block.settings.text_banner != blank -%}
+                    <div class="text-wave" >
+                        {{ block.settings.text_banner }}
+                    </div>
+                {%- endif -%}
+            </div>
+      {%- endif -%}
+
+      {%- if block.settings.image_desktop == blank and block.settings.image_mobile == blank -%}
+          <div class="image-wrap">
+            {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+      {%- endif -%}
+
+  {%- endcapture -%}
+
+    {{image_layout}}
+</div>

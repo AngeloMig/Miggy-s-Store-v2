@@ -1,0 +1,60 @@
+{%- liquid
+      assign fixed_aspect_ratio = false
+      unless settings.product_grid_image_size == 'natural'
+        assign fixed_aspect_ratio = true
+      endunless
+
+      assign preview_image = block.settings.image
+      if force_jpg
+        assign img_url = preview_image | img_url: '1x1', format: 'jpg' | replace: '_1x1.', '_{width}x.'
+      else
+        assign img_url = preview_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.'
+      endif
+
+      assign image_limit = 1
+      assign image_count = 0
+      if settings.product_hover_image
+        assign image_limit = 10
+      endif
+
+      assign slider_image_padding = '100%'
+    -%}
+
+<div class="hun-col background-media-text--{{ block.id }} background-media-grid" >
+    {% if block.settings.image != blank %}
+        <div class="pic-item background-media-text__image {% if block.settings.image != blank %}lazyload{% endif %} "
+            {% if block.settings.image != blank %}
+                data-bgset="{% render 'bgset', image: preview_image %}"
+                data-sizes="auto"
+            {% endif %}
+            style="background-position: center center"
+            >
+        </div> 
+    {% endif %}
+    {%- if block.settings.image != blank -%}
+        <noscript>
+            <div
+                class="background-media-text__image"
+                style="background-image: url({{ block.settings.image | img_url: 'master' }});">
+            </div>
+        </noscript>
+    {%- endif -%}
+    {%- if block.settings.image == blank -%}
+        <div class="background-media-text__image">
+            {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+        </div>
+    {%- endif -%}
+    <div class="text-item">
+        {%- if block.settings.item_title != blank -%}
+        <h3 class="title-item">{{ block.settings.item_title }}</h3>
+        {%- endif -%}
+
+        {%- if block.settings.item_des != blank -%}
+        <div class="des-item">{{ block.settings.item_des }}</div>
+        {%- endif -%}  
+
+        {% if block.settings.button_link != blank %}
+          <a class="link-item" href="{{ block.settings.button_link }}"></a>
+        {% endif %}  
+    </div>
+</div>

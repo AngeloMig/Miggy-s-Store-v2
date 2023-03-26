@@ -1,0 +1,72 @@
+{%- liquid
+  assign force_jpg = false
+
+  unless grid_item_width
+    assign grid_item_width = 'medium-up--one-quarter small--one-half'
+  endunless
+-%}
+{%- liquid
+      assign fixed_aspect_ratio = false
+      unless settings.product_grid_image_size == 'natural'
+        assign fixed_aspect_ratio = true
+      endunless
+
+      if settings.product_grid_image_size == 'natural'
+        assign class_natural = "image_brand-natural"
+      endif
+
+      assign preview_image = section.settings.brand_collection
+      if force_jpg
+        assign img_url = preview_image | img_url: '1x1', format: 'jpg' | replace: '_1x1.', '_{width}x.'
+      else
+        assign img_url = preview_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.'
+      endif
+
+      assign image_limit = 1
+      assign image_count = 0
+      if settings.product_hover_image
+        assign image_limit = 10
+      endif
+
+      assign slider_image_padding = '100%'
+    -%}
+<div
+  class="grid__item grid-product {{ grid_item_width }}{% if settings.product_hover_details %} grid-product__hover-details{% endif %} brand-collection-img {% if class_natural %}{{class_natural}}{% endif %}"
+  data-ao
+  data-product-grid
+  data-id="{{ product.id }}">
+      <div class="grid-product__content">
+          <div class="product-slider" data-image-count="1" >
+             <div class="product-slide">
+              <div class="image-wrap">
+                  {%- if fixed_aspect_ratio -%}
+                  <div
+                    class="grid__image-ratio grid__image-ratio--{{ settings.product_grid_image_size }} lazyload"
+                    
+                    data-sizes="auto">
+                     <img src="{{ section.settings.brand_collection | img_url: 'master'}}" alt="" />
+                  </div>
+                {%- else -%}
+                  {%- assign slider_image_padding = 100 | divided_by: preview_image.aspect_ratio | append: '%' -%}
+                  <div class="image-wrap"
+                    style="height: 0; padding-bottom: {{ slider_image_padding }};"
+                    >
+                    <img class="grid-product__image lazyload"
+                        data-src="{{ img_url }}"
+                        data-widths="[750, 900, 1080]"
+                        data-aspectratio="{{ preview_image.aspect_ratio }}"
+                        data-sizes="auto"
+                        alt="{{ preview_image.alt | escape }}">
+                    <noscript>
+                      <img class="grid-product__image lazyloaded"
+                        src="{{ preview_image | img_url: '400x' }}"
+                        alt="{{ preview_image.alt | escape }}">
+                    </noscript>
+                  </div>
+                {%- endif -%}
+              </div>
+          </div>
+        </div>
+      </div>
+      {% comment %}<img src="{{ section.settings.brand_collection | img_url: 'master'}}" alt="" />{% endcomment %}
+  </div>
